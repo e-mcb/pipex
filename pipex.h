@@ -6,7 +6,7 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 22:47:19 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/11 22:47:20 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/02/18 20:56:19 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,8 @@
 # include <fcntl.h>
 # include "libft/libft.h"
 
-/* Mandatory functions */
-void	error(void);
-char	*find_path(char *cmd, char **envp);
-int		get_next_line(char **line);
-void	execute(char *argv, char **envp);
-
-/* Bonus functions */
-int		open_file(char *argv, int i);
-void	usage(void);
+void	ft_error(const char *message);
+char	*ft_pathfinder(char *cmd, char **envp);
+void	ft_exec_cmd(char *argv, char **envp);
 
 #endif
