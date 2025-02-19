@@ -6,7 +6,7 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 20:20:05 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/19 00:41:17 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/02/19 02:03:33 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*construct_final_path(char *path, char *cmd)
 // splits all the directories of 
 // the PATH= line of envp to append the command to them
 // tries to access all the paths to 
-// check for their existence before reutrning them
+// check for their existence before reutrning the correct one
 
 char	*ft_pathfinder(char *cmd, char **envp)
 {
