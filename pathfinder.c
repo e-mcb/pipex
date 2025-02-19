@@ -6,11 +6,13 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 20:20:05 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/18 20:56:00 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/02/19 00:41:17 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+// flushes the array containing all of the possible paths
 
 void	free_possible_paths(char **possible_paths)
 {
@@ -24,6 +26,8 @@ void	free_possible_paths(char **possible_paths)
 	}
 	free(possible_paths);
 }
+//iterates through envp to find the PATH= line 
+//returns teh content of that line offset by 5 (after PATH=)
 
 char	*find_path_variable(char **envp)
 {
@@ -36,17 +40,27 @@ char	*find_path_variable(char **envp)
 		return (NULL);
 	return (envp[i] + 5);
 }
+// takes the path given as parameter which is 
+// a possible directory where the command might be located. 
+// Appends a / as well as the command to the path
 
 char	*construct_final_path(char *path, char *cmd)
 {
 	char	*tmp_path;
 	char	*final_path;
 
+	if (!cmd)
+		return (NULL);
 	tmp_path = ft_strjoin(path, "/");
 	final_path = ft_strjoin(tmp_path, cmd);
+	ft_putstr_fd(final_path, 0);
 	free(tmp_path);
 	return (final_path);
 }
+// splits all the directories of 
+// the PATH= line of envp to append the command to them
+// tries to access all the paths to 
+// check for their existence before reutrning them
 
 char	*ft_pathfinder(char *cmd, char **envp)
 {
@@ -63,7 +77,7 @@ char	*ft_pathfinder(char *cmd, char **envp)
 	while (possible_paths[i])
 	{
 		final_path = construct_final_path(possible_paths[i], cmd);
-		if (access(final_path, F_OK) == 0)
+		if (final_path != NULL && access (final_path, F_OK) == 0)
 		{
 			free_possible_paths(possible_paths);
 			return (final_path);

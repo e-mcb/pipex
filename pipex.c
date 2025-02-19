@@ -6,17 +6,23 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 22:36:43 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/18 20:58:01 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/02/19 01:52:26 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+// prints an error message and exits the program
+// only used if the exit status is supposed to be 1
 
 void	ft_error(const char *message)
 {
 	perror(message);
 	exit(EXIT_FAILURE);
 }
+// splits the command from its options
+// finds the path of the command
+// executes it
 
 void	ft_exec_cmd(char *argv, char **envp)
 {
@@ -32,11 +38,21 @@ void	ft_exec_cmd(char *argv, char **envp)
 		while (cmd[i])
 			free(cmd[i++]);
 		free(cmd);
-		ft_error("Command not found");
+		perror("command not found");
+		exit(127);
 	}
 	if (execve(path, cmd, envp) == -1)
 		ft_error("execve failed");
 }
+
+// opens the file2, creates it if it doesnt exist
+// deletes its content if it exists
+// redirect STDIN to fd[0] (read) 
+// to read from the child process
+// redirects STDOUT to file2 (write)
+// closes file2, fd[0] and fd[1]
+// executes the cmd2
+// writes its output into file2
 
 void	ft_parent_process(char **argv, char **envp, int *fd)
 {
@@ -52,6 +68,13 @@ void	ft_parent_process(char **argv, char **envp, int *fd)
 	close(file_output);
 	ft_exec_cmd(argv[3], envp);
 }
+
+// opens file1 in read only mode
+// redirects STDOUT to fd[1]
+// redirects STDIN to file1
+// closes file1, fd[0] and fd[1]
+// executes the cmd1 which
+// will be sent back to the parent process
 
 void	ft_child_process(char **argv, char **envp, int *fd)
 {
@@ -74,11 +97,7 @@ int	main(int argc, char **argv, char **envp)
 	pid_t	pid;
 
 	if (argc != 5)
-	{
-		ft_putstr_fd("Argument error\n", 2);
-		ft_putstr_fd("Usage: ./pipex <file1> <cmd1> <cmd2> <file2>\n", 1);
-		return (EXIT_FAILURE);
-	}
+		ft_error("Invalid format");
 	if (pipe(fd) == -1)
 		ft_error("Failed to create pipe");
 	pid = fork();
