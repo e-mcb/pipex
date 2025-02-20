@@ -6,12 +6,16 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 21:28:05 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/20 20:57:32 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/02/20 22:15:38 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
+// opens the files with the correct flags
+// i == 0 for heredoc (append)
+// i == 1 for output file
+//i == 2 for input file
 int	ft_open(char *argv, int i)
 {
 	int file;
@@ -27,6 +31,13 @@ int	ft_open(char *argv, int i)
 		ft_error("failed to open the file");
 	return (file);
 }
+
+// handles the communication inbetween pipes
+// if in the child process, the STDOUT will move to the write
+// end of the pipe
+// then when in the parent process, then the STDIN will
+// be moved to the read end of the pipe
+// for the subsequent command to handle
 void	ft_child_process(char *argv, char **envp)
 {
 	pid_t	pid;
@@ -51,6 +62,9 @@ void	ft_child_process(char *argv, char **envp)
 	}
 }
 
+//writes the line received from STDIN
+// until limiter is encountered
+
 void ft_gnl_heredoc(int fd[2], char *limiter)
 {
     char *line;
@@ -68,6 +82,7 @@ void ft_gnl_heredoc(int fd[2], char *limiter)
         free(line);
     }
 }
+
 
 void ft_handle_heredoc(int argc, char *limiter)
 {
@@ -91,7 +106,12 @@ void ft_handle_heredoc(int argc, char *limiter)
 	
 }
 // sed
-// nested "" / () 
+// nested "" / ()
+// processes each child process individually in
+// a while loop as long as there are commands to execute
+// immediately changes the STDIN to the input file
+// and ends by changin the STDOUT to the output file 
+// before executing the last command
 int main (int argc, char **argv, char **envp)
 {
 	int	i;

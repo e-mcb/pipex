@@ -6,7 +6,7 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 23:34:35 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/20 21:55:30 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/02/20 22:00:23 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,30 +39,9 @@ void	ft_exec_cmd(char *argv, char **envp)
 		ft_error("execve failed");
 }
 
-char **ft_special_split(char const *str, char *sep)
-{
-	
-}
 
-static size_t ft_count_words(char const *str, char const *sep)
-{
-	size_t	i;
-	size_t	j;
-	size_t	word_count;
 
-	if (!str[0])
-		return (0);
-	i = 0;
-	word_count = 0;
-	while (s[i++] != 0)
-	{
-		while (sep[j] != 0)
-		{
-			if (sep[j] == s[i])
-				word_count++;
-		}
-	}
-}
+
 
 #include <stdio.h>
 #include <string.h>
