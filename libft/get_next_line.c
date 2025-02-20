@@ -6,11 +6,11 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 11:13:01 by mzutter           #+#    #+#             */
-/*   Updated: 2024/12/01 11:16:04 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/02/19 23:30:23 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
 
 char	*check_storage(char *storage)
 {
@@ -27,15 +27,17 @@ static char	*reader_function(int fd, char *storage, char *buffer)
 	ssize_t	read_value;
 
 	read_value = 1;
-	while (read_value > 0)
+	while (read_value)
 	{
 		read_value = read(fd, buffer, BUFFER_SIZE);
-		if (read_value == 0)
-			break ;
+		if (read_value <= 0)
+		{
+			if (read_value == 0)
+				break ;
+			return (NULL);
+		}
 		buffer[read_value] = 0;
 		storage = check_storage(storage);
-		if (!storage)
-			return (NULL);
 		str = storage;
 		storage = ft_strjoin(str, buffer);
 		free (str);
@@ -77,7 +79,7 @@ char	*get_next_line(int fd)
 	buffer = malloc((size_t)BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
-	if (read(fd, 0, 0) < 0 || fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 	{
 		free(buffer);
 		buffer = NULL;
@@ -88,7 +90,11 @@ char	*get_next_line(int fd)
 	next_line = reader_function(fd, storage, buffer);
 	free(buffer);
 	if (!next_line)
+	{
+		free (storage);
+		storage = NULL;
 		return (NULL);
+	}
 	storage = extract_line(next_line);
 	return (next_line);
 }
