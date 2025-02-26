@@ -6,7 +6,7 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 00:32:10 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/19 23:27:51 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/02/25 23:02:23 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,9 @@
 # include <stdlib.h>
 # include <stddef.h>
 
-
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 20
 # endif
-
 
 typedef struct s_list
 {
