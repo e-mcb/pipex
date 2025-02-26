@@ -6,7 +6,7 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 22:47:19 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/26 01:40:34 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/02/26 02:36:18 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include "libft/libft.h"
-
 
 char	*ft_pathfinder(char *cmd, char **envp);
 void	ft_exec_cmd(char *argv, char **envp);

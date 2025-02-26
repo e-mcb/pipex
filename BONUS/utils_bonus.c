@@ -6,11 +6,20 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 23:34:35 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/25 23:12:24 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/02/26 02:50:02 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+void	secure_dup2(int old_fd, int new_fd)
+{
+	if (dup2(old_fd, new_fd) == -1)
+	{
+		perror("dup2 failed");
+		exit(EXIT_FAILURE);
+	}
+}
 
 void	ft_error(const char *message)
 {
@@ -18,65 +27,22 @@ void	ft_error(const char *message)
 	exit(EXIT_FAILURE);
 }
 
-static char	*trim_quotes(char *str)
+void	open_heredoc(int argc, char **argv)
 {
-	int		start;
-	int		end;
-	char	*trimmed;
+	int	out;
 
-	start = 0;
-	end = (ft_strlen (str) - 1);
-	if (str[start] == '"' || str[start] == '\'')
-		start++;
-	if (str[end] == '"' || str[end] == '\'')
-		end--;
-	trimmed = malloc(end - start + 2);
-	if (!trimmed)
-		return (NULL);
-	ft_strlcpy(trimmed, &str[start], end - start + 1);
-	trimmed[end - start + 1] = '\0';
-	return (trimmed);
+	out = ft_open(argv[argc - 1], 0);
+	ft_handle_heredoc(argc, argv[2]);
+	secure_dup2(out, STDOUT_FILENO);
 }
 
-static void	free_paths(char **cmd)
+int	handle_input_output(int argc, char **argv)
 {
-	int	i;
+	int	in;
+	int	out;
 
-	i = 0;
-	while ((*cmd)[i])
-	{
-		free((*cmd)[i]);
-		i++;
-	}
-	free(*cmd);
-	perror("command not found");
-	exit(127);
-}
-
-void	ft_exec_cmd(char *argv, char **envp)
-{
-	char	**cmd;
-	char	*path;
-	char	*trim;
-	int		i;
-
-	i = 0;
-	cmd = ft_split2(argv, ' ');
-	while (cmd[i])
-	{
-		trim = trim_quotes(cmd[i]);
-		if (trim)
-		{
-			free(cmd[i]);
-			cmd[i] = trim;
-		}
-		i++;
-	}
-	path = ft_pathfinder(cmd[0], envp);
-	if (!path)
-	{
-		free_paths(&cmd);
-	}
-	if (execve(path, cmd, envp) == -1)
-		ft_error("execve failed");
+	in = ft_open(argv[1], 2);
+	out = ft_open(argv[argc - 1], 1);
+	secure_dup2(in, STDIN_FILENO);
+	return (out);
 }

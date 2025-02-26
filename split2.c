@@ -6,12 +6,11 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 21:24:48 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/26 02:02:17 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/02/26 02:32:08 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include "libft/libft.h"
 
 static char	**ft_malloc_error(char **tab)
 {

@@ -6,7 +6,7 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 21:28:05 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/26 00:16:51 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/02/26 02:49:40 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	ft_handle_heredoc(int argc, char *limiter)
 int	main(int argc, char **argv, char **envp)
 {
 	int	i;
+	int	out;
 
 	if (argc < 5)
 		ft_error("Invalid format");
@@ -103,12 +104,12 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_strncmp(argv[1], "here_doc", 9) == 0)
 		{
 			i = 3;
-			handle_heredoc(argc, argv);
+			open_heredoc(argc, argv);
 		}
 		else
 		{
 			i = 2;
-			handle_input_output(argc, argv);
+			out = handle_input_output(argc, argv);
 		}
 		while (i < argc - 2)
 			ft_child_process(argv[i++], envp);
