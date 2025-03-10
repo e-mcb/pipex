@@ -6,7 +6,7 @@
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 21:24:48 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/26 02:32:08 by mzutter          ###   ########.fr       */
+/*   Updated: 2025/03/10 21:59:25 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,11 @@ static void	ft_get_next_word(char **next_word, size_t *next_word_len, char c)
 	i = 0;
 	in_quotes = false;
 	opening_quote = '\0';
-	while (next_word && **next_word == c && !in_quotes)
+	while (**next_word == c && !in_quotes)
 		(*next_word)++;
 	while ((*next_word)[i])
 	{
-		if (handle_quotes((*next_word)[i], &in_quotes, &opening_quote))
-			i++;
+		handle_quotes((*next_word)[i], &in_quotes, &opening_quote);
 		if ((*next_word)[i] == c && !in_quotes)
 			return ;
 		(*next_word_len)++;
@@ -114,19 +113,3 @@ char	**ft_split2(char const *s, char c)
 	tab[i] = NULL;
 	return (tab);
 }
-
-// int main(void)
-// {
-// 	char line[] = "wc -l";
-// 	char **result;
-// 	int i = 0;
-
-// 	result = ft_split2(line, ' ');
-// 	while (result[i])
-// 	{
-// 		printf("%s\n", trim_quotes(result[i]));
-// 		free(result[i]);
-// 		i++;
-// 	}
-// 	free(result);
-// }

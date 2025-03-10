@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pathfinder_bonus.c                                 :+:      :+:    :+:   */
+/*   path_and_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mzutter <mzutter@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/19 23:33:33 by mzutter           #+#    #+#             */
-/*   Updated: 2025/02/25 23:01:40 by mzutter          ###   ########.fr       */
+/*   Created: 2025/03/10 21:33:48 by mzutter           #+#    #+#             */
+/*   Updated: 2025/03/10 22:11:46 by mzutter          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 // flushes the array containing all of the possible paths
-
-void	free_possible_paths(char **possible_paths)
+static void	free_possible_paths(char **possible_paths)
 {
 	int	i;
 
@@ -26,10 +25,10 @@ void	free_possible_paths(char **possible_paths)
 	}
 	free(possible_paths);
 }
+
 //iterates through envp to find the PATH= line 
 //returns teh content of that line offset by 5 (after PATH=)
-
-char	*find_path_variable(char **envp)
+static char	*find_path_variable(char **envp)
 {
 	int	i;
 
@@ -44,7 +43,7 @@ char	*find_path_variable(char **envp)
 // a possible directory where the command might be located. 
 // Appends a / as well as the command to the path
 
-char	*construct_final_path(char *path, char *cmd)
+static char	*construct_final_path(char *path, char *cmd)
 {
 	char	*tmp_path;
 	char	*final_path;
@@ -57,10 +56,6 @@ char	*construct_final_path(char *path, char *cmd)
 	free(tmp_path);
 	return (final_path);
 }
-// splits all the directories of 
-// the PATH= line of envp to append the command to them
-// tries to access all the paths to 
-// check for their existence before reutrning them
 
 char	*ft_pathfinder(char *cmd, char **envp)
 {
@@ -87,4 +82,31 @@ char	*ft_pathfinder(char *cmd, char **envp)
 	}
 	free_possible_paths(possible_paths);
 	return (NULL);
+}
+
+int	ft_exec_cmd(char *argv, char **envp)
+{
+	char	**cmd;
+	char	*path;
+	char	*trim;
+	int		i;
+
+	i = 0;
+	cmd = ft_split2(argv, ' ');
+	if (!cmd)
+		return (ft_putstr_fd("Error:Malloc failed\n", 2), 0);
+	while (cmd[i])
+	{
+		trim = trim_quotes(cmd[i]);
+		if (trim)
+		{
+			free(cmd[i]);
+			cmd[i] = trim;
+		}
+		i++;
+	}
+	path = helper_path(cmd, envp);
+	if (execve(path, cmd, envp) == -1)
+		return (ft_error("execve failed\n"), 1);
+	return (0);
 }
